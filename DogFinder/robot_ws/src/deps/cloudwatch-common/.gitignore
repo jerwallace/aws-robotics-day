@@ -1,0 +1,6 @@
+build/
+devel/
+logs/
+.idea/
+.catkin_tools/
+**/.catkin_tools/

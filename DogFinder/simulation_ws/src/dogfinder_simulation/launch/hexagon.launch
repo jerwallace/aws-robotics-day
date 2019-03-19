@@ -1,0 +1,23 @@
+<launch>
+  <!-- Set gui to false for RoboMaker, it launches a gui for us
+       Use cmdline arg gui:=true locally for gazebo -->
+  <arg name="gui" default="false"/>
+
+  <!-- World -->
+  <include file="$(find aws_robomaker_simulations_hexagon)/launch/hexagon.launch">
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- Simulate rapsicam (real TurtleBot3) by republishing to common
+  raw (uncompressed) topic -->
+  <node pkg="image_transport" type="republish" name="republish"  output="screen"
+    args="raw in:=/camera/rgb/image_raw compressed out:=/raspicam_node/image"/>
+  <rosparam param="disable_pub_plugins">
+    - 'image_transport/compressedDepth'
+    - 'image_transport/theora'
+  </rosparam>
+
+
+  <!-- Spawn Robot -->
+  <include file="$(find dogfinder_simulation)/launch/spawn_turtlebot.launch"/>
+</launch>

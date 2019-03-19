@@ -1,0 +1,31 @@
+<launch>
+  <!-- 
+       Use simulation time means nodes declared after this
+       will not use the system clock and instead wait for 
+       simulation ticks
+  -->
+  <param name="use_sim_time" value="true" />
+
+  <!-- report speed metrics to CloudWatch -->
+  <node pkg="dogfinder_robot" type="monitor_speed" name="monitor_speed" output="screen">
+  </node>
+
+  <include file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch" >
+      <!-- The configuration can either be passed in using the "config_file" parameter or by using a rosparam tag
+              to load the config into the parameter server -->
+      <arg name="config_file" value="$(find cloudwatch_metrics_collector)/config/sample_configuration.yaml" />
+  </include>
+
+    </include>
+    <!-- monitor cpu usage -->
+    <node pkg="health_metric_collector" type="collector" name="collector" respawn="true">
+        <!-- metrics sampling interval in seconds -->
+        <param name="interval" value="5" type="double" />
+    </node>
+  <!-- log rosout -->
+  <node pkg="cloudwatch_logger" type="cloudwatch_logger" name="cloudwatch_logger">
+        <rosparam command="load" file="$(find dogfinder_robot)/config/cw_logs_config.yaml" />
+  </node>
+  <!-- rotate robot -->
+  <node pkg="dogfinder_robot" type="rotate" name="rotate" output="screen"></node>
+</launch>

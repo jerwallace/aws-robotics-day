@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+'''
+ Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+ Licensed under the Apache License, Version 2.0 (the "License").
+ You may not use this file except in compliance with the License.
+ A copy of the License is located at
+
+  http://aws.amazon.com/apache2.0
+
+ or in the "license" file accompanying this file. This file is distributed
+ on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ express or implied. See the License for the specific language governing
+ permissions and limitations under the License.
+'''
+
+import rospy
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from dogfinder_robot.msg import TurnCommand
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
+
+M_PI = 3.14159265358979323846
+
+class Turner():
+    '''Turns robot X radians clockwise or counter-cockwise'''
+    def __init__(self):
+        self._cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        # Current orientation (yaw) of robot in relation to world plane
+        self.heading = None
+        self.roll = 0.0
+        self.pitch = 0.0
+        self.yaw = 0.0
+        self.sub = rospy.Subscriber ('/odom', Odometry, self.get_rotation)
+        self.command = rospy.Subscriber ('/turn_to_heading', TurnCommand, self.get_command)
+
+
+    def get_rotation (self, msg):
+        '''Updates heading in terms of angular degrees'''
+        orientation_q = msg.pose.pose.orientation
+        orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+        (self.roll, self.pitch, self.yaw) = euler_from_quaternion (orientation_list)
+        if self.yaw >= 0 and self.yaw <= M_PI:
+            # western side 180 - 360
+            self.heading = (180 - self.yaw*180/M_PI) + 180
+        elif self.yaw <= 0 and self.yaw >= -M_PI:
+            # eastern side 0 - 180
+            self.heading = abs(self.yaw*180/M_PI)
+
+
+    def get_command(self, msg):
+        '''Request to turn robot to specific heading and speed'''
+        rospy.loginfo('Reqest to %s orient robot to heading: %s and angular velocity: %s' %
+            ('clockwise' if msg.direction < 0 else 'counter-clockwise',
+            msg.heading,
+            msg.velocity))
+        self.turn_to_heading(msg.heading, msg.velocity, msg.direction)
+
+
+
+    def turn_to_heading(self, desired_heading, velocity, direction):
+        self.twist = Twist()
+        
+        # wait for heading to populate from /odom
+        r = rospy.Rate(0.1)
+        while not self.heading:
+            r.sleep()
+
+        # move to desired heading then stop
+        r = rospy.Rate(10)
+        rospy.loginfo('Starting robot rotation from heading: %s', self.heading)
+        while True:
+            if (self.heading > desired_heading-2) and (self.heading < desired_heading+2):
+                # on target, stop all angular momentum
+                self.twist.angular.x = 0.0
+                self.twist.angular.y = 0.0
+                self.twist.angular.z = 0.0
+                self._cmd_pub.publish(self.twist)
+                rospy.loginfo('Robot now stopped at heading: %s', self.heading)
+                return
+            else:
+                self.twist.angular.z = direction * velocity
+                self._cmd_pub.publish(self.twist)
+                r.sleep()
+
+
+def main():
+    rospy.init_node('turn')
+    try:
+        # Create instance of node and listen for, and process
+        # incoming commands
+        turner = Turner()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+
+if __name__ == '__main__':
+    main()

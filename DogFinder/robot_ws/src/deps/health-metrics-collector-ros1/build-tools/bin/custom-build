@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e # fail script on any individual command failing
+
+make

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>dogfinder_robot</name>
+  <version>0.0.0</version>
+  <description>
+  This package provides samples application for integrating AWS CloudWatch with ROS and AWS RoboMaker.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="gavinaws@amazon.com">Gavin Adams</author>
+  <maintainer email="gavinaws@amazon.com">Gavin Adams</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+
+  <depend>cloudwatch_logger</depend>
+  <depend>cloudwatch_metrics_collector</depend>
+  <depend>cloudwatch_logs_common</depend>
+  <depend>cloudwatch_metrics_common</depend>
+  <depend>aws_common</depend>
+  <depend>aws_ros1_common</depend>
+  <depend>aws_cpp_sdk_logs</depend>
+  <depend>aws_cpp_sdk_monitoring</depend>
+  <depend>ros_monitoring_msgs</depend>
+  <depend>health_metric_collector</depend>
+
+  <depend>kinesis_manager</depend>
+  <depend>kinesis_video_streamer</depend>
+  <depend>kinesis_video_msgs</depend>
+  <depend>h264_encoder_core</depend>
+  <depend>h264_video_encoder</depend>
+  <depend>amazon_kinesis_video_streams_producer_sdk_cpp</depend>
+  <depend>aws_cpp_sdk_kinesis</depend>
+
+  <!-- Target robot specifics - TurtleBot3 here -->
+  <depend>turtlebot3</depend>
+  <depend>turtlebot3_msgs</depend>
+  <!-- <depend>raspicam_node</depend> -->
+
+  <!-- For calling Rekognition -->
+  <depend>python-boto3-pip</depend>
+
+  <!-- Camera/cv support -->
+  <depend>vision_opencv</depend>
+  <depend>python-numpy</depend>
+
+  <build_depend>message_generation</build_depend>
+  <build_export_depend>message_runtime</build_export_depend>
+  <exec_depend>message_runtime</exec_depend>
+</package>

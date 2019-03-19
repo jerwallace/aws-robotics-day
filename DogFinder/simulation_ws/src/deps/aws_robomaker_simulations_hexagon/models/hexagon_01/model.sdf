@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='hexagon_01'>
+    <static>1</static>
+    <link name="room">
+      <inertial>
+        <mass>1</mass>
+      </inertial>
+      <visual name="visual">
+            <geometry>
+                <mesh>
+                    <uri>file://models/hexagon_01/meshes/hexagon_01.dae</uri>
+                </mesh>
+            </geometry>
+        </visual>
+        <collision name="collision">
+            <geometry>
+                <mesh>
+                    <uri>file://models/hexagon_01/meshes/hexagon_01.dae</uri>
+                </mesh>
+            </geometry>
+        </collision>
+    </link>
+  </model>
+</sdf>

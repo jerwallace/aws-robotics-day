@@ -1,0 +1,229 @@
+#!/usr/bin/env python
+'''
+ Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+ Licensed under the Apache License, Version 2.0 (the "License").
+ You may not use this file except in compliance with the License.
+ A copy of the License is located at
+
+  http://aws.amazon.com/apache2.0
+
+ or in the "license" file accompanying this file. This file is distributed
+ on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ express or implied. See the License for the specific language governing
+ permissions and limitations under the License.
+'''
+
+import numpy as np
+import rospy
+import boto3
+import time
+import base64
+import json
+import os
+import cv2
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import CompressedImage
+from dogfinder_robot.msg import TurnCommand
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
+
+# Global section
+M_PI = 3.14159265358979323846
+
+class DogFinder():
+    '''Turns in place and checks for first image of a dog'''
+    def __init__(self):
+
+        # These values are default for simulation testing or
+        # set by a fleet deployment as hardware and topics
+        # may be different
+
+        # We can be so much more that a dog finder, but we are case-sensitive
+        self.goal_label = (
+            os.getenv('GOAL_LABEL') if os.getenv('GOAL_LABEL')
+            else 'Dog'
+        )
+
+        # Current orientation (yaw) of robot in relation to world plane
+        self.heading = None
+        self.odom_sub = rospy.Subscriber ('/odom', Odometry, self.get_heading)
+        self.goal_sub = rospy.Subscriber ('/df_action', String, self.manage_goal)
+        self.pub = rospy.Publisher('/turn_to_heading', TurnCommand, queue_size=1)
+
+        # When first started, don't start, wait for command
+        self.start_finder = False
+        # Set initial goal state as not-completed
+        self.goal_complete = False
+        # returned tag we should see from Rekognition to complete
+        self.image_tag = 'dog'
+        # Create defaults for publish
+        self.velocity = 0.2
+        self.direction = -1
+        # Position of faces of hexagon
+        self.faces = [0, 60, 120, 180, 240, 300]
+
+        # # Setup for interacting with camera images
+        # self.bridge = CvBridge()
+
+        # AWS Rekognition client - set for us-west-2 by default
+        self.client = boto3.client('rekognition', region_name='us-west-2')
+
+        # wait for heading to populate from /odom
+        r = rospy.Rate(0.5)
+        rospy.loginfo('Waiting for heading to settle')
+        while not self.heading:
+            r.sleep()
+        rospy.loginfo('Heading settled to: %s', self.heading)
+
+
+    def wait_for_start(self):
+        '''spin until message recieved, then release'''
+
+        r = rospy.Rate(10)
+        while not self.start_finder:
+            r.sleep()
+        return
+
+
+    def find_dog(self):
+        '''turn on faces until dog image is found,then stop'''
+
+        msg = TurnCommand()
+        msg.velocity=self.velocity
+        msg.direction=self.direction
+
+        r = rospy.Rate(10)
+        while not self.goal_complete:
+            '''
+            Rotate the TurtleBot3 until it faces a wall with a picture,
+            then take an image, process with Rekognition and determine
+            if it matches the goal of finding a dog based on the labels
+            returned.
+            '''
+
+            # Grab heading once per cycle from /Odom
+            hdg = self.heading
+
+            # Get next heading based on array (how many sides and orientation)
+            # then publish that heading to /turn_to_heading
+            next_hdg = self._next_face(hdg)
+            msg.heading = next_hdg
+            self.pub.publish(msg)
+
+            # Wait until TurtleBot reaches the target heading
+            target_hdg = 360 if next_hdg == 0 else next_hdg
+            rospy.loginfo('New target_hdg: %s, current heading is: %s, moving there now!' % (target_hdg, self.heading))
+            # Stop a couple degrees before heading, 
+            while self.heading <= (target_hdg-2):
+                r.sleep()
+            rospy.loginfo('Arrived at heading: %s', self.heading)
+
+            # Get picture from appropriate camera topic and send to Rekognition for labels
+            rospy.loginfo('Processing image via Amazon Rekognition')
+            img_str = cv2.imencode('.jpg', self.get_image())[1].tostring()
+
+            # Call Rekognition
+            try:
+                response = self.client.detect_labels(
+                    Image={'Bytes': img_str},
+                    MaxLabels=5
+                )
+                labels = self.sort_labels(response)
+                rospy.loginfo('For image at heading %s, following labels detected: %s' % (next_hdg, labels))
+            except Exception as e:
+                rospy.loginfo('Error processing Rekognition: %s', e)
+                labels = []
+            # If the target image, "Dog", is detected stop, otherwise continue searching
+            if 'Dog' in labels:
+                self.goal_complete = True
+                rospy.loginfo('Found dog image at heading %s', next_hdg)
+        
+        # Dog found, stop this operation, reset and wait for next start command
+        self.start_finder = False
+        self.goal_complete = False
+
+
+    def _next_face(self, hdg):
+        '''return next face heading from current hdg'''
+        for i in self.faces:
+            # If within 10 degrees to face, target the next one
+            if hdg < i-10:
+                return(i)
+            # If in the northwest sector set to due North (0)
+            elif hdg >=290 and hdg <= 350:
+                return (0)
+            # If close to North, set to 60 to account for startup error
+            elif hdg > 350 and hdg < 360:
+                return(60)
+
+
+    def get_heading(self, msg):
+        '''Updates self.heading in terms of angular degrees'''
+        orientation_q = msg.pose.pose.orientation
+        orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+        (roll, pitch, yaw) = euler_from_quaternion (orientation_list)
+        if yaw >= 0 and yaw <= M_PI:
+            # western side 180 - 360
+            self.heading = (180 - yaw*180/M_PI) + 180
+        elif yaw <= 0 and yaw >= -M_PI:
+            # eastern side 0 - 180
+            self.heading = abs(yaw*180/M_PI)
+
+
+    def manage_goal( self, msg):
+        '''Sets the goal to start (true)'''
+        if msg.data == 'start':
+            self.start_finder = True
+            rospy.loginfo('Received start command, time to find Fido!')
+        else:
+            rospy.loginfo('I do not understand the received message %s posted on /df_action',
+                msg.data)
+        return
+
+
+    def get_image(self):
+        '''receive one compressed image from camera and return raw image'''
+        try:
+            msg = rospy.wait_for_message('/raspicam_node/image/compressed', CompressedImage, timeout=3)
+            np_arr = np.fromstring(msg.data, np.uint8)
+            cv_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        except Exception as e:
+            print(e)
+        else:
+            return cv_image
+
+
+    def sort_labels(self, rek_response):
+        '''Return labels sorted by confidence as JSON object'''
+        labels = rek_response['Labels']
+        list = []
+        sorted_list = sorted(labels, key=lambda k: k['Confidence'])
+        for i in sorted_list:
+            list.append(i['Name'])
+        return(json.dumps(list))
+
+
+def main():
+    rospy.init_node('dog_finder')
+    try:
+        # Create instance of node and start goal seeking
+        rospy.loginfo('Creating DogFinder object') 
+        dog_finder = DogFinder()
+
+        while True:
+            # Wait until we recieve a "start" message then
+            # start goal to find dog
+            dog_finder.wait_for_start()
+
+            # Start message received, find dog
+            rospy.loginfo('Starting goal to find dog')
+            dog_finder.find_dog()
+            # Last step of find_dog is to setup for next "start" message
+
+    except rospy.ROSInterruptException:
+        pass
+
+if __name__ == '__main__':
+    main()

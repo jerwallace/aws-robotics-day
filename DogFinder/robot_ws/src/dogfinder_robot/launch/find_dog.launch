@@ -1,0 +1,50 @@
+<launch>
+  <!-- 
+       Use simulation time means nodes declared after this
+       will not use the system clock and instead wait for 
+       simulation ticks
+  -->
+  <param name="use_sim_time" value="true" />
+
+  <!-- report speed metrics to CloudWatch -->
+  <node pkg="dogfinder_robot" type="monitor_speed" name="monitor_speed" output="screen"></node>
+
+  <include file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch" >
+      <!-- The configuration can either be passed in using the "config_file" parameter or by using a rosparam tag
+              to load the config into the parameter server -->
+      <arg name="config_file" value="$(find cloudwatch_metrics_collector)/config/sample_configuration.yaml" />
+  </include>
+
+  <!-- monitor cpu usage -->
+  <node pkg="health_metric_collector" type="health_metric_collector" name="health_metric_collector" respawn="true" output="log">
+      <!-- metrics sampling interval in seconds -->
+      <param name="interval" value="5" type="double" />
+  </node>
+
+  <!-- log rosout -->
+  <node pkg="cloudwatch_logger" type="cloudwatch_logger" name="cloudwatch_logger">
+        <rosparam command="load" file="$(find dogfinder_robot)/config/cw_logs_config.yaml" />
+  </node>
+
+ <!--Launch encoder node for kinesis video stream-->
+  <node pkg="h264_video_encoder" type="h264_video_encoder" name="h264_video_encoder">
+    <rosparam command="load" file="$(find dogfinder_robot)/config/h264_encoder_config.yaml"/>
+    <param name="image_transport" value="raw"/>
+  </node>
+
+  <!-- Launch the Kinesis Video Stream node -->
+  <!-- If a stream config file argument is provided by the caller then we will load it into the node's namespace -->
+  <arg name="stream_config" default="$(find dogfinder_robot)/config/kvs_config.yaml" />
+  <node name="kinesis_video_streamer" pkg="kinesis_video_streamer" type="kinesis_video_streamer">
+    <param name="aws_client_configuration/region" value="us-west-2" />
+    <param name="kinesis_video/log4cplus_config" value="$(find kinesis_video_streamer)/kvs_log_configuration" />
+    <param name="kinesis_video/stream_count" value="1" />
+    <rosparam if="$(eval stream_config!='')" command="load" file="$(arg stream_config)" ns="kinesis_video/stream0" />
+  </node>
+
+  <!-- Supporting node to turn the robot to a specific heading -->
+  <node pkg="dogfinder_robot" type="turn" name="turn" output="screen"></node>
+
+  <!-- Set goal to find picture of dog -->
+  <node pkg="dogfinder_robot" type="dog_finder" name="dog_finder" output="screen"></node>
+</launch>
