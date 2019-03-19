@@ -1,4 +1,4 @@
-# AWS RoboMaker Workshop - re:Invent 2018
+# AWS Robotics Day with RoboMaker
 
 Welcome! In this workshop you become familiar with the AWS RoboMaker services that provide you the tools to develop, integrate with other AWS services, and package robot code ready for deployment onto physical robots. Throughout there will be mention of the Robot Operating System, or [ROS](http://www.ros.org/) related concepts and tools. The workshop will not go into depth on these except for the commands used and what they do.
 
