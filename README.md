@@ -1,14 +1,18 @@
 # AWS Robotics Day with RoboMaker
 
-Welcome! In this workshop you become familiar with the AWS RoboMaker services that provide you the tools to develop, integrate with other AWS services, and package robot code ready for deployment onto physical robots. Throughout there will be mention of the Robot Operating System, or [ROS](http://www.ros.org/) related concepts and tools. The workshop will not go into depth on these except for the commands used and what they do.
+Welcome Robot Builders! In this workshop you become familiar with AWS RoboMaker, a service that provides you the tools to easily develop, simulate and deploy intelligent robot applications that can integrate with AWS services. This includes AWS machine learning services, monitoring services, and analytics services that enable a robot to stream data, navigate, communicate, comprehend, and learn. Today, you will also get hands on with a *real* robot (Robotis TurtleBot 3 Burger) to learn how you could use AWS RoboMaker to manage and deploy robot applications on production robots. 
 
-Having said that, if you do have questions, please do ask any of the workshop staff and we will get you answers.
+RoboMaker extends the most widely used open-source robotics software framework **Robot Operating System**, or [ROS](http://www.ros.org/). Therefore, in this workshop will include references to ROS concepts and tools. No previous ROS experience is required, however, if you would like to learn more check out the [Learning Resources](learning_resources.md) section for references.
 
-This workshop is designed to cover setup of your AWS account, run through three application, and then clean up resources at the end so you are not being charged for them. Please read through and complete each activity before starting the next. If something doesn't look correct, please ask for assistance as we want to make sure the concept covered are well understood.
+**Here is our agenda for the day:**
 
-The account setup is covered in this document, and then each activity is separate document you can pull up.
+(1) **Pre-workshop Setup**: We will start by setting up your AWS account to develop robot applications with AWS RoboMaker. 
+(2) **Hello Robot**: Next, we will run a simple HelloWorld application to introduce you to AWS RoboMaker, ROS and robotics development. 
+(3) **Find Fido**: Finally, we will build, simulate and deploy our robot application to find and greet dogs. For this workshop we will use Robotis TurtleBot3 Burger as our robot. 
 
-Again, thank you for your time attending this workshop. Let's get started!
+Please read through and complete each activity before starting the next. If something doesn't look correct, ask for assistance as we want to make sure the concept covered are well understood. Also, if you find a bug - submit a pull request!
+
+Excited to build a robot using AWS? Let's get started!
 
 ## Pre-workshop setup
 
@@ -57,11 +61,11 @@ Below are the activities setup for this workshop. Right-click on each and open i
 
 :exclamation: Once all activities are done, please then complete the account cleanup section at the bottom of this page.
 
-### [1 - Development environment and HelloWorld](./1_dev_hello.md)
+### [1 - Hello Robot: Development environment and HelloWorld](./1_dev_hello.md)
 
 In this activity you will setup a development environment and build, bundle, and simulate a "Hello World" application.
 
-### [2 - Cloud service integrations to do object detection](./2_dog_finder.md) 
+### [2 - Find Fido: Cloud integration to enable the robot to find objects](./2_dog_finder.md) 
 
 In this activity you will explore other methods for building and deploying applications in the development environment, and see how an application can directly interact with AWS services in a ROS native manner (nodes and topics), and how any AWS service can be used through normal SDK calls (python boto3 in this instance).
 
