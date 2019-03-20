@@ -1,6 +1,8 @@
 # AWS Robotics Day with RoboMaker
 
-Welcome Robot Builders! In this workshop you become familiar with AWS RoboMaker, a service that provides you the tools to easily develop, simulate and deploy intelligent robot applications that can integrate with AWS services. This includes AWS machine learning services, monitoring services, and analytics services that enable a robot to stream data, navigate, communicate, comprehend, and learn. Today, you will also get hands on with a *real* robot (Robotis TurtleBot 3 Burger) to learn how you could use AWS RoboMaker to manage and deploy robot applications on production robots. 
+Welcome Robot Builders! 
+
+In this workshop you become familiar with AWS RoboMaker, a service that provides you the tools to easily develop, simulate and deploy intelligent robot applications that can integrate with AWS services. This includes AWS machine learning services, monitoring services, and analytics services that enable a robot to stream data, navigate, communicate, comprehend, and learn. Today, you will also get hands on with a *real* robot (Robotis TurtleBot 3 Burger) to learn how you could use AWS RoboMaker to manage and deploy robot applications on production robots. 
 
 RoboMaker extends the most widely used open-source robotics software framework **Robot Operating System**, or [ROS](http://www.ros.org/). Therefore, in this workshop will include references to ROS concepts and tools. No previous ROS experience is required, however, if you would like to learn more check out the [Learning Resources](learning_resources.md) section for references.
 
