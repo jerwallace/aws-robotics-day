@@ -6,9 +6,9 @@ RoboMaker extends the most widely used open-source robotics software framework *
 
 **Here is our agenda for the day:**
 
-(1) **Pre-workshop Setup**: We will start by setting up your AWS account to develop robot applications with AWS RoboMaker. 
-(2) **Hello Robot**: Next, we will run a simple HelloWorld application to introduce you to AWS RoboMaker, ROS and robotics development. 
-(3) **Find Fido**: Finally, we will build, simulate and deploy our robot application to find and greet dogs. For this workshop we will use Robotis TurtleBot3 Burger as our robot. 
+1. **Pre-workshop Setup**: We will start by setting up your AWS account to develop robot applications with AWS RoboMaker. 
+2. **Hello Robot**: Next, we will run a simple HelloWorld application to introduce you to AWS RoboMaker, ROS and robotics development. 
+3. **Find Fido**: Finally, we will build, simulate and deploy our robot application to find and greet dogs. For this workshop we will use Robotis TurtleBot3 Burger as our robot. 
 
 Please read through and complete each activity before starting the next. If something doesn't look correct, ask for assistance as we want to make sure the concept covered are well understood. Also, if you find a bug - submit a pull request!
 
