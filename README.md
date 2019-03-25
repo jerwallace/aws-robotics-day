@@ -71,6 +71,11 @@ In this activity you will setup a development environment and build, bundle, and
 
 In this activity you will explore other methods for building and deploying applications in the development environment, and see how an application can directly interact with AWS services in a ROS native manner (nodes and topics), and how any AWS service can be used through normal SDK calls (python boto3 in this instance).
 
+### [3 - Find Fido: Deploy an application to a physical robot](./3_deployment.md) 
+
+In this activity you will explore how to configure a robot and a fleet, and deploy a software bundle to your robot.
+
+
 ## Workshop cleanup
 
 AWS only charges for consumed resources. Please follow the steps below to shutdown or delete resources so you will not be charged.
