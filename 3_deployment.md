@@ -62,9 +62,9 @@ This activity covers the steps required to prepare a physical robot to receive a
    ```text
    arn:aws:iam::123456789012:role/Cloud9-RoboMakerWorkshopDeploymentRole
    ```
-
+   
 4. Using the ARN you found in the previous step, run the command below to allow Greengrass to use it for deployment:
-
+   
    ```bash
    # replace DEPLOYMENT_ROLE_ARN with your ARN
    aws greengrass associate-service-role-to-account --role-arn $DEPLOYMENT_ROLE_ARN
