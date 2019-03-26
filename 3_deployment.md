@@ -54,7 +54,7 @@ This activity covers the steps required to prepare a physical robot to receive a
 
 13.  You must now download the certificates that need to be installed on your robot.  When installed on your robot, they will give your robot access to call AWS services.  Click the orange **Download** button.  There is no need to download the Greengrass Core software.  Your device has been pre-configured with the Greengrass binaries.  This will download a zip file named DogFinder-setup.zip (or similar, depending on the name you provided for your robot in Step 9 above).
 
-   ![3_download_certs](img/download_certs.jpg)
+   ![3_download_certs](img/download-certs.jpg)
 
 14.  The certificates you just downloaded need to be copied to the physical robot and extracted to a directory on the device.  These instructions use scp to copy files to the device, and ssh to connect to the device.  Both commands are available in Terminal on macOS, and in the Windows PowerShell.  However, availability of these tools may vary, depending on your configuration (particularly on Windows).
 
