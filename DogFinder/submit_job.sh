@@ -1,7 +1,8 @@
 #!/bin/bash
 
 export BUCKET_NAME="your bucket name"
-export SUBNETS="your_subnet1,your_subnet2"
+export SUBNET1="subnet-04b41b1d76621447a"
+export SUBNET2="subnet-053bac63eb2525cb3"
 export SECURITY_GROUP="your_security_group"
 export ROLE_ARN="your iam role ARN here"
 
