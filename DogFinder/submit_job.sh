@@ -9,12 +9,12 @@ export ROLE_ARN="your iam role ARN here"
 
 aws robomaker create-robot-application \
   --name DogFinder_robot \
-  --sources "s3Bucket=$BUCKET_NAME,s3Key=dogfinder/output-robot.tar.gz,architecture=X86_64" \
+  --sources "s3Bucket=$BUCKET_NAME,s3Key=dogfinder/output-robot.tar,architecture=X86_64" \
   --robot-software-suite "name=ROS,version=Kinetic"
 
 aws robomaker create-simulation-application \
   --name DogFinder_simulation \
-  --sources "s3Bucket=$BUCKET_NAME,s3Key=dogfinder/output-sim.tar.gz,architecture=X86_64" \
+  --sources "s3Bucket=$BUCKET_NAME,s3Key=dogfinder/output-sim.tar,architecture=X86_64" \
   --simulation-software-suite "name=Gazebo,version=7" \
   --robot-software-suite "name=ROS,version=Kinetic"\
   --rendering-engine "name=OGRE,version=1.x"
