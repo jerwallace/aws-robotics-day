@@ -16,24 +16,8 @@ When complete, you will have learned:
 
 ## Activity tasks
 
-1. Download the zip file that contains the robot and simulation applications from the link provided by the presenter.
 
-2. With the Cloud9 IDE open, drag the zip file (DogFinder.zip) onto of the name of your workshop and release:
-
-   ![2_drag_file](img/2_drag_file.png)
-
-   In the terminal pane, open a new terminal window (plus sign ->New Terminal) which should place you in the root of the working space (`/environment`). From here unzip the file:
-
-   ```bash
-   $ unzip DogFinder.zip 
-   Archive:  DogFinder.zip
-      creating: DogFinder/
-      ...
-   $ ls
-   DogFinder  DogFinder.zip  HelloWorld  roboMakerLogs
-   ```
-
-3. For this activity, you will be using three terminal tabs to work side-by-side on the simulation and robot application directories, while using the third tab for working with the operating system.
+1. For this activity, you will be using three terminal tabs to work side-by-side on the simulation and robot application directories, while using the third tab for working with the operating system.
 
    Close all terminal windows (bash, Immediate, etc.)  and then use the green plus sign to open three tabs like this:
 
@@ -41,10 +25,18 @@ When complete, you will have learned:
 
    When a task says to "From the **SIM TAB** run XXX", use the second/middle tab named "sim".
 
-4. To build the robot application, issue the following commands from the **ROBOT TAB**:
+2. The project we'll be working with is located in GitHub.  You need to clone it into the Cloud9 environment so you can work with it.  From the **OS TAB**, run the following commands to clone the repository:
 
    ```bash
-   cd DogFinder/robot_ws/
+   cd ~/environment
+      
+   # clone the DogFinder repository
+   git clone https://github.com/jerwallace/aws-robotics-day.git
+
+3. To build the robot application, issue the following commands from the **ROBOT TAB**:
+
+   ```bash
+   cd aws-robotics-day/DogFinder/robot_ws/
    
    # Ensure latest packages
    sudo apt-get update
@@ -57,12 +49,14 @@ When complete, you will have learned:
    colcon build
    ```
 
-5. Once that is complete, build the simulation application from the **SIM TAB**:
+4. Once that is complete, build the simulation application from the **SIM TAB**:
 
    ```bash
-   cd DogFinder/simulation_ws/
+   cd aws-robotics-day/DogFinder/simulation_ws/
+ 
    # rosdep again - will complete quickly
    rosdep install --from-paths src --ignore-src -r -y
+   
    # Build the simulation application - will complete quickly
    colcon build
    ```
@@ -73,7 +67,7 @@ When complete, you will have learned:
 
    However, since we cannot simulate from the Cloud9 IDE, continue to bundle both applications.
 
-6. To bundle the robot application, from the **ROBOT TAB** execute the following:
+5. To bundle the robot application, from the **ROBOT TAB** execute the following:
 
    ```bash
    colcon bundle
@@ -91,23 +85,23 @@ When complete, you will have learned:
 
    That's one of the benefits of AWS RoboMaker, the ability to wrap the complexity of ROS into a few commands. In the background all of the same steps were being taken as you just completed. By doing this step-by-step,  you can see process is to build and deploy a robot application. In a lot of situations you will have to go through similar setups for your applications, so having familiarity with it is helpful.
 
-7. With both applications built, you will now copy them to S3 so they can be used by the simulation service. For both applications, copy to S3:
+6. With both applications built, you will now copy them to S3 so they can be used by the simulation service. For both applications, copy to S3:
 
    From the **ROBOT TAB**:
 
    ```bash
    # Replace YOUR_BUCKET_NAME with your bucket
-   aws s3 cp bundle/output.tar.gz s3://YOUR_BUCKET_NAME/dogfinder/output-robot.tar.gz
+   aws s3 cp bundle/output.tar.gz s3://YOUR_BUCKET_NAME/dogfinder/output-robot.tar
    ```
 
    and from the **SIM TAB**:
 
    ```bash
    # Replace YOUR_BUCKET_NAME with
-   aws s3 cp bundle/output.tar.gz s3://YOUR_BUCKET_NAME/dogfinder/output-sim.tar.gz
+   aws s3 cp bundle/output.tar.gz s3://YOUR_BUCKET_NAME/dogfinder/output-sim.tar
    ```
 
-8. With the bundle files ready, create a simulation job from the OS TAB. In the root of the DogFinder directory is a file named `submit_job.sh`. Double-click it and replace the entries at the top of the file with your specific ones (S3 bucket, VPC details, etc.), **and then save**. It should look similar to this:
+7. With the bundle files ready, create a simulation job from the OS TAB. In the root of the DogFinder directory is a file named `submit_job.sh`. Double-click it and replace the entries at the top of the file with your specific ones (S3 bucket, VPC details, etc.), **and then save**. It should look similar to this:
   ```bash
      #!/bin/bash
      # Example - replace with your own
@@ -117,11 +111,11 @@ When complete, you will have learned:
      export ROLE_ARN="arn:aws:iam::1234565789012:role/robomaker_role"
    ```
 
-9. In the **OS TAB**, run the script which will create the robot and simulation applications, then create and start the simulation job:
+8. In the **OS TAB**, run the script which will create the robot and simulation applications, then create and start the simulation job:
 
    ```bash
    # script in top-level of DogFinder/ directory, adjust as needed
-   DogFinder/submit_job.sh
+   aws-robotics-day/DogFinder/submit_job.sh
    ```
 
    A successful launch will return a JSON document with all the details including an *arn* with the simulation job value:
@@ -130,7 +124,7 @@ When complete, you will have learned:
    "arn": "arn:aws:robomaker:us-west-2:123456789012:simulation-job/sim-8rcvbm7p023f",
    ```
 
-10. At this point you can open a AWS RoboMaker console and check the status of the simulation job. It will take a few minutes to go from *Pending* to *Running*, but that point you can open Gazebo and Terminal applications.
+9. At this point you can open a AWS RoboMaker console and check the status of the simulation job. It will take a few minutes to go from *Pending* to *Running*, but that point you can open Gazebo and Terminal applications.
 
     Notice in Gazebo as you pan around that the robot if facing north at the picture of the bridge. Right now the robot is waiting for a message to start goal seeking and finding the picture of the dog. Before you issue the command from the simulation terminal, let's bring up the following windows and resize so we can see them all (the may take a bit of adjusting):
 
@@ -142,7 +136,7 @@ When complete, you will have learned:
 
     You don't need to see too much of the video stream window in the background, just enough to see it steaming video.
 
-11. At this point, in Gazebo the robot should facing upwards (due North); the video stream should show the  bridge photo; and CloudWatch logs should show a message "Waiting to start finding Fido". Now from the terminal, you will send a message to a topic the robot is listening on to start the goal seeking action:
+10. At this point, in Gazebo the robot should facing upwards (due North); the video stream should show the  bridge photo; and CloudWatch logs should show a message "Waiting to start finding Fido". Now from the terminal, you will send a message to a topic the robot is listening on to start the goal seeking action:
 
     ```bash
     rostopic pub --once /df_action std_msgs/String 'start' 
@@ -156,9 +150,9 @@ When complete, you will have learned:
 
     ![2_dog_logs](img/2_dog_logs.png)
 
-12. Once the dog image is found, the robot waits for the next command to start the process again. You can issue the `rostopic pub` command again in the terminal to start the process again.
+11. Once the dog image is found, the robot waits for the next command to start the process again. You can issue the `rostopic pub` command again in the terminal to start the process again.
 
-13. At this point if there is time, feel free to investigate the other applications and look at how the code is working. For example, if you'd like to see the robot's view of the world via rqt, open the rqt application and from the rqt menu select Plugins->Visualization->Image View and then in Image View drop down, select /camera/rgb/image_raw.
+12. At this point if there is time, feel free to investigate the other applications and look at how the code is working. For example, if you'd like to see the robot's view of the world via rqt, open the rqt application and from the rqt menu select Plugins->Visualization->Image View and then in Image View drop down, select /camera/rgb/image_raw.
 
 ## Activity wrap-up
 
