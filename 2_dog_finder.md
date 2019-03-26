@@ -70,16 +70,21 @@ When complete, you will have learned:
 5. To bundle the robot application, from the **ROBOT TAB** execute the following:
 
    ```bash
+   #make sure colcon bundle is the latest version.  This only needs to be run once in the Cloud9 environment
+   sudo pip3 install -U colcon-bundle colcon-ros-bundle
+
+   #create the bundle for the robot application
    colcon bundle
    ```
 
    Once successfully completed, do the same on the **SIM TAB**:
 
    ```bash
+   #create the bundle for the simulation application
    colcon bundle
    ```
 
-   These two operations will create complete compressed tar files for use.
+   These two operations will create complete tar files for use and will write them to eaach workspaces' respective bundle directory.
 
    :exclamation: Why do I have to go through all these steps when in the previous activity I just clicked a menu command and magic happened?!?!
 
