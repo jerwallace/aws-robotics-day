@@ -34,10 +34,6 @@ This activity covers setting up the AWS RoboMaker development environment and qu
 4. Delete the `roboMakerSettings.json` file by right-clicking on it and selecting *Delete*->Yes. We will use the example applications file to complete.
 
 5. Next, use the menu to download and create the HelloWorld application by clicking *RoboMaker Resources->Download Samples->1. Hello World*. This will download, unzip, and load the readme file for the Hello World application.
-6. After downloading, if you see an error "Could not get lock /var/lib/dpkg/lock-frontend - open" please wait for a minute and then run
- ```bash
-  sudo apt-get update && sudo apt-get upgrade -y
- ```
 
 6. Before updating the file that builds the menus, you will first need to create an IAM role that gives the simulation service the proper permissions to other AWS resources. For instance you could allow the simulation to have access to CloudWatch Logs, but not have access to S3.
 
