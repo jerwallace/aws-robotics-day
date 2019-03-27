@@ -1,6 +1,6 @@
 # Deploy a ROS application to your robot
 
-In the previous exercise, you used RoboMaker with Cloud9 to build, bundle and simulate the Find Fido robot application.  In RoboMaker, simulations use Gazebo, which runs in AWS on a fleet of servers with x86 CPU architecture.  However, many physical robots use different CPU architecture, such as ARM.  Before a robot application can be deployed and invoked on a physical robot, it may need to be rebuilt and rebundled for the target CPU architecture of the robot.
+In the previous exercise, you used RoboMaker with Cloud9 to build, bundle and simulate the Find Fido robot application.  In RoboMaker, simulations use Gazebo, which runs in AWS on a fleet of servers with x86 CPU architecture.  However, many physical robots use different CPU architectures, such as ARM.  Before a robot application can be deployed and invoked on a physical robot, it may need to be rebuilt and rebundled for the target CPU architecture of the robot.
 
 In this workshop, you'll be deploying an application to a TurtleBot 3 Burger robot.  This robot uses a Raspberry Pi, which is based on the ARMHF architecture.  Within the RoboMaker Cloud9 environment, we have pre-installed a Docker container that simplifies the process of compiling for alternate architectures.  The initial build and bundle operation for an alternate architecture may take up to 20 minutes, so it is outside the scope of this workshop.  If you have time after completing this exercise, you can review the detailed steps for building for alternate architectures in the [RoboMaker documentation](https://docs.aws.amazon.com/robomaker/latest/dg/gs-deploy.html).  For this exercise, we have pre-created a bundle for the TurtleBot3 Burger robot.  We will use that bundle to deploy the application to your robot.
 
@@ -18,7 +18,7 @@ This activity covers the steps required to prepare a physical robot to receive a
 
 2. Before you can deploy to a robot, you need to create an IAM role that gives the robot permissions to AWS resources. This role will be used by the robot to download our bundled robot application, and it will be used by the application at runtime to access AWS services.
 
-   For this activity, you will create an IAM role that has these permissions. From the CLI (terminal) pane, copy and paste the following commands to create a role named *RoboMakerWorkshop-DeploymentRole*:
+   For this activity, you will create an IAM role that has these permissions. From the **OS tab**, copy and paste the following commands to create a role named *Cloud9-RoboMakerWorkshopDeploymentRole*:
 
    ```bash
    # ### Begin of copy (include this line) ###
@@ -76,7 +76,7 @@ This activity covers the steps required to prepare a physical robot to receive a
    
    ```bash
    # Replace YOUR_BUCKET_NAME with your bucket
-   aws s3 cp bundle/output.armhf.tar.gz s3://YOUR_BUCKET_NAME/dogfinder/output-robot.armhf.tar.gz
+   aws s3 cp ~/environment/aws-robotics-day/DogFinder/robot_ws/bundle/output.armhf.tar s3://YOUR_BUCKET_NAME/dogfinder/output-robot.armhf.tar
    ```
 
 6. Now that you've uploaded an ARMHF version of the application to S3, you need to tell RoboMaker where to find it.  Open the RoboMaker console, and review the Robot applications Development->Robot applications).  Click on the name of the robot application, DogFinder_robot, to reiew its details.
@@ -89,7 +89,7 @@ This activity covers the steps required to prepare a physical robot to receive a
 
    ```bash
    # Replace YOUR_BUCKET_NAME with your bucket
-   s3://YOUR_BUCKET_NAME/dogfinder/output-robot.armhf.tar.gz
+   s3://YOUR_BUCKET_NAME/dogfinder/output-robot.armhf.tar
    ```
    
    Click **Create**.
