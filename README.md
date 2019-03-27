@@ -41,7 +41,7 @@ To complete this workshop you need an AWS account with administrative permission
 
 6. Ensure the default VPC is available for use and has Internet access (either public IP address or NAT gateway). Make sure you are looking at Default VPC in us-west-2!
 
-7. Finally, from the RoboMaker console, create a simulation job (which you will cancel), to get the subnet ID's and security group ID:
+7. Finally, you need to get a few values about your VPC from the RoboMaker console.  In the following steps, you'll begin the process of creating a RoboMaker simulation job for the sole purpose of obtaining the subnet ID's and security group ID that you'll need later.  You won't actually start a simulation yet.  We'll do that later.  To get the information about your VPC network, do the following:
 
    1. *RoboMaker->Simulation jobs->Create simulation job*
 
@@ -56,6 +56,8 @@ To complete this workshop you need an AWS account with administrative permission
    6. It should look similar to this:
 
       ![1_select_subnets](img/1_select_subnets.png)
+      
+   7.  Click **Cancel**.  We don't need to create this simulation job at this time.      
 
 ## Activities
 
