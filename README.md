@@ -2,7 +2,7 @@
 
 Welcome Robot Builders! 
 
-In this workshop you become familiar with AWS RoboMaker, a service that enables you to easily develop, simulate and deploy intelligent robot applications that integrate with AWS services. This includes AWS machine learning services, monitoring services, and analytics services that enable a robot to stream data, navigate, communicate, comprehend, and learn. Today, you will also get hands on with a physical robot (Robotis TurtleBot 3 Burger) to learn how to manage and deploy robot applications to production robots using AWS RoboMaker.
+In this workshop you become familiar with AWS RoboMaker, a service that enables you to easily develop, simulate and deploy intelligent robot applications that integrate with AWS services. This includes AWS machine learning services, monitoring services, and analytics services that enable a robot to stream data, navigate, communicate, comprehend, and learn. Today, you will also get hands on with a *real* robot (Robotis TurtleBot 3 Burger) to learn how to manage and deploy robot applications to production robots using AWS RoboMaker.
 
 RoboMaker extends the most widely used open-source robotics software framework **Robot Operating System**, or [ROS](http://www.ros.org/). Therefore, this workshop will include references to ROS concepts and tools. No previous ROS experience is required, however, if you would like to learn more check out the [Learning Resources](learning_resources.md) section for references.
 
@@ -41,7 +41,7 @@ To complete this workshop you need an AWS account with administrative permission
 
 6. Ensure the default VPC is available for use and has Internet access (either public IP address or NAT gateway). Make sure you are looking at Default VPC in us-west-2!
 
-7. Finally, you need to get a few values about your VPC from the RoboMaker console.  In the following steps, you'll begin the process of creating a RoboMaker simulation job for the sole purpose of obtaining the subnet ID's and security group ID that you'll need later.  You won't actually start a simulation yet.  We'll do that later.  To get the information about your VPC network, do the following:
+7. Finally, from the RoboMaker console, create a simulation job (which you will cancel), to get the subnet ID's and security group ID:
 
    1. *RoboMaker->Simulation jobs->Create simulation job*
 
@@ -56,8 +56,6 @@ To complete this workshop you need an AWS account with administrative permission
    6. It should look similar to this:
 
       ![1_select_subnets](img/1_select_subnets.png)
-      
-   7.  Click **Cancel**.  We don't need to create this simulation job at this time.      
 
 ## Activities
 
@@ -73,11 +71,6 @@ In this activity you will setup a development environment and build, bundle, and
 
 In this activity you will explore other methods for building and deploying applications in the development environment, and see how an application can directly interact with AWS services in a ROS native manner (nodes and topics), and how any AWS service can be used through normal SDK calls (python boto3 in this instance).
 
-### [3 - Find Fido: Deploy an application to a physical robot](./3_deployment.md) 
-
-In this activity you will explore how to configure a robot and a fleet, and deploy a software bundle to your robot.
-
-
 ## Workshop cleanup
 
 AWS only charges for consumed resources. Please follow the steps below to shutdown or delete resources so you will not be charged.
@@ -87,4 +80,4 @@ AWS only charges for consumed resources. Please follow the steps below to shutdo
 3. Also from the AWS RoboMaker Console, from Development->Development environments, click on the environment name, *Edit*, then *Delete* from the AWS Cloud9 console.
 4. In the CloudWatch Console, under *Logs*, select each LogGroup (`/aws/robomake/SimulationJobs` and `dogfinder_workshop`) and click *Actions->Delete log group*.
 5. In Kinesis Video Streams, delete your stream which will release the stored video content.
-6. In IAM, delete the *Cloud9-RoboMakerWorkshop* role, and the *Cloud9-RoboMakerWorkshopDeploymentRole*. 
+6. In IAM, delete the *Cloud9-RoboMakerWorkshop* role.
