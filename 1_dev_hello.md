@@ -14,6 +14,7 @@ This activity covers setting up the AWS RoboMaker development environment and qu
 
    * Name: `workshop` or something descriptive
    * Instance type: `m4.large`
+   * Choose the VPC (default), and a subnet for your development environment
    * Click Create
 
 3. This opens the environment's detail page, click *Open environment*, which will open a new browser tab with the Cloud9 IDE.
