@@ -9,18 +9,24 @@ RoboMaker extends the most widely used open-source robotics software framework *
 **Here is our agenda for the day:**
 
 1. **Pre-workshop Setup**: We will start by setting up your AWS account to develop robot applications with AWS RoboMaker. 
-2. **Hello Robot**: Next, we will run a simple HelloWorld application to introduce you to AWS RoboMaker, ROS and robotics development. 
-3. **Find Fido**: Finally, we will build, simulate and deploy our robot application to find and greet dogs. For this workshop we will use Robotis TurtleBot3 Burger as our robot. 
+
+2. **Hello Robot**: In the first activity, we will run a simple HelloWorld application to introduce you to AWS RoboMaker, ROS and robotics development. 
+
+3. **Find Fido**: In the second activity, we will extend the functionality of our robot and build a robot application that searches for dogs.
+
+3. **Deploy Hello Robot Code**: In the final activity we will deploy the hello world robot application to a **TurtleBot Burger 3**. Once successful, the turtlebot will rotate in place. 
 
 Please read through and complete each activity before starting the next. If something doesn't look correct, ask for assistance as we want to make sure the concept covered are well understood. Also, if you find a bug - submit a pull request!
 
 Excited to build a robot using AWS? Let's get started!
 
-## Pre-workshop setup
+## Workshop Setup 
 
-To complete this workshop you need an AWS account with administrative permissions, as this is needed to create or modify resources and allow AWS RoboMaker to interact with services on your behalf. Please follow these steps to setup your account:
+To complete this workshop you need an **AWS account with administrative permissions** as this is needed to create or modify resources and allow AWS RoboMaker to interact with services on your behalf. 
 
-1. [Log in via the AWS console](https://console.aws.amazon.com/) and set your region to Oregon from the top menu to right of your username. All activities will reference Oregon (us-west-2). 
+Please follow these steps to setup your account:
+
+1. [Log in via the AWS console](https://console.aws.amazon.com/) and set your region to **Oregon** from the top menu to right of your username. All activities will reference **Oregon (us-west-2)**. 
 
    :exclamation: All code is currently set only for us-west-2, using any other regions will not work in this iteration.
 
@@ -28,7 +34,7 @@ To complete this workshop you need an AWS account with administrative permission
 
 3. Create a "cheat sheet" text file to hold values needed for the activities. When you see "store for later use", this is where the details should go and be referenced.
 
-4. Create an S3 bucket that will hold all of the AWS RoboMaker related objects. We will reference `df-bucket` throughout such as `s3://df-bucket/logfiles`, but make sure the name is unique, but short. Store the bucket name for later use,
+4. Create an S3 bucket and make note of the bucket name. This bucket will hold all of the AWS RoboMaker related objects. **We will reference `<YOUR_S3_BUCKET_NAME>` throughout the workshop.** For example:  `s3://<YOUR_S3_BUCKET_NAME>/logfiles`. s3 bucket names need to be unique, but short.
 
 5. Open Kinesis Video Streams and create a new stream:
 
@@ -39,7 +45,7 @@ To complete this workshop you need an AWS account with administrative permission
 
    Note the Stream name (`roboMaker_TurtleBot3`) for later use.
 
-6. Ensure the default VPC is available for use and has Internet access (either public IP address or NAT gateway). Make sure you are looking at Default VPC in us-west-2!
+6. Ensure the default VPC is available for use and has Internet access (either public IP address or NAT gateway). **Make sure you are looking at Default VPC in us-west-2!**
 
 7. Finally, you need to get a few values about your VPC from the RoboMaker console.  In the following steps, you'll begin the process of creating a RoboMaker simulation job for the sole purpose of obtaining the subnet ID's and security group ID that you'll need later.  You won't actually start a simulation yet.  We'll do that later.  To get the information about your VPC network, do the following:
 
@@ -57,7 +63,9 @@ To complete this workshop you need an AWS account with administrative permission
 
       ![1_select_subnets](img/1_select_subnets.png)
       
-   7.  Click **Cancel**.  We don't need to create this simulation job at this time.      
+   7.  Click **Cancel**.  **Do not create this simulation job at this time.**
+
+**Congratulations!** You have compelte4d the setup process of the workshop. 
 
 ## Activities
 
@@ -73,7 +81,7 @@ In this activity you will setup a development environment and build, bundle, and
 
 In this activity you will explore other methods for building and deploying applications in the development environment, and see how an application can directly interact with AWS services in a ROS native manner (nodes and topics), and how any AWS service can be used through normal SDK calls (python boto3 in this instance).
 
-### [3 - Find Fido: Deploy an application to a physical robot](./3_deployment.md) 
+### [3 - Deploy Hello Robot Code: Deploy an application to a physical robot](./3_deployment.md) 
 
 In this activity you will explore how to configure a robot and a fleet, and deploy a software bundle to your robot.
 
@@ -83,7 +91,9 @@ In this activity you will explore how to configure a robot and a fleet, and depl
 AWS only charges for consumed resources. Please follow the steps below to shutdown or delete resources so you will not be charged.
 
 1. Delete the S3 bucket by selecting the bucket then clicking *Delete* from above the list of buckets.
+
 2. From the AWS RoboMaker console, make sure there are no simulation jobs in progress. If there are, select them and click *Actions->Cancel*.
+
 3. Also from the AWS RoboMaker Console, from Development->Development environments, click on the environment name, *Edit*, then *Delete* from the AWS Cloud9 console.
 4. In the CloudWatch Console, under *Logs*, select each LogGroup (`/aws/robomake/SimulationJobs` and `dogfinder_workshop`) and click *Actions->Delete log group*.
 5. In Kinesis Video Streams, delete your stream which will release the stored video content.
