@@ -34,7 +34,7 @@ This activity covers setting up the AWS RoboMaker development environment and qu
 
 4. Delete the `roboMakerSettings.json` file by right-clicking on it and selecting *Delete*->Yes. We will use the example applications file to complete.
 
-5. Next, use the menu to download and create the HelloWorld application by clicking *RoboMaker Resources->Download Samples->1. Hello World*. This will download, unzip, and load the readme file for the Hello World application.
+5. Next, use the menu to download and create the HelloWorld application by clicking *Resources->Download Samples->1. Hello World*. This will download, unzip, and load the readme file for the Hello World application.
 
 6. Before updating the file that builds the menus, you will first need to create an IAM role that gives the simulation service the proper permissions to other AWS resources. For instance you could allow the simulation to have access to CloudWatch Logs, but not have access to S3.
 
@@ -141,15 +141,15 @@ This activity covers setting up the AWS RoboMaker development environment and qu
        },
    ```
 
-10. You next use the menu to build and bundle both the robot and simulation application. Click *RoboMaker Run->Build->HelloWorld Robot* to start the compile for the robot application. This will take approximately 1-2 minutes as it needs to download and compile the code. When you see a `Process exited with code: 0` which indicated success, use the same command to build the *HelloWorld Simulation*.
+10. You next use the menu to build and bundle both the robot and simulation application. Click *Run->Build->HelloWorld Robot* to start the compile for the robot application. This will take approximately 1-2 minutes as it needs to download and compile the code. When you see a `Process exited with code: 0` which indicated success, use the same command to build the *HelloWorld Simulation*.
 
   At this point both applications have been compiled locally. To run as a AWS RoboMaker simulation job, you will first need to bundle them. This process "bundles" the application along with all operating system dependencies, sort of like a container. This creates compressed output files locally.
 
-11. As with the build steps above, do the same for both the robot and simulation application, but select *RoboMaker Run->Bundle->...* instead of build. This will take 10-15 minutes or so to complete for both, and you may see Cloud9 warnings about low memory, which you can disregard.
+11. As with the build steps above, do the same for both the robot and simulation application, but select *Run->Bundle->...* instead of build. This will take 10-15 minutes or so to complete for both, and you may see Cloud9 warnings about low memory, which you can disregard.
 
    While these are building, review the JSON file for the simulation area. Here you can see that the launch configs reference the package name (hello_world_robot or hello_world_simulation) and the launch file to use (rotate.launch and empty_world.launch respectively). 
 
-12. When both bundle operations are completed, launch a simulation job (*RoboMaker Run->Launch Simulation->HelloWorld*). This will do the following:
+12. When both bundle operations are completed, launch a simulation job (*Run->Launch Simulation->HelloWorld*). This will do the following:
 
     * Upload the robot and simulation application bundles (approximately 1.2GiB) to the S3 bucket
     * Create a robot application and simulation application which reference the uploaded bundles
