@@ -126,21 +126,27 @@ This activity covers the steps required to prepare a physical robot to receive a
       $ scp FILE_NAME.zip pi@<ROBOT_IP_ADDRESS>:/home/pi 
       ```
 
-21. Connect to the robot, and configure the certificates and start the Greengrass service.  In this step, you use ssh to connect to the robot, and then you unzip the certificates file to the location used by Greengrass.  Finally, you start the Greengrass service.  This enalbes the device to retrieve your robot bundle and deploy it to the robot.  As a reminder, you are connecting as the pi user, and the password is:  roboMaker2019
+21. Connect to the robot, flash the OpenCR board, configure the certificates and start the Greengrass service.  In this step, you use ssh to connect to the robot, and then you unzip the certificates file to the location used by Greengrass.  Finally, you start the Greengrass service.  This enalbes the device to retrieve your robot bundle and deploy it to the robot.  As a reminder, you are connecting as the pi user, and the password is:  roboMaker2019
    
    ```bash
    # use SSH and connect to the robot.  Replace ROBOT_IP_ADDRESS with the IP address for your device.
    $ ssh pi@<ROBOT_IP_ADDRESS>
-   
+   $ sudo su
+
+   $ export OPENCR_PORT=/dev/ttyACM0
+   $ export OPENCR_MODEL=burger
+   $ rm -rf ./opencr_update.tar.bz2
+   $ wget https://github.com/ROBOTIS-GIT/OpenCR-Binaries/raw/master/turtlebot3/ROS1/latest/opencr_update.tar.bz2 && tar -xvf opencr_update.tar.bz2 && cd ./opencr_update && ./update.sh $OPENCR_PORT $OPENCR_MODEL.opencr && cd ..
+
    # unzip the certificates into the /greengrass directory.  Replace FILE_NAME with file you copied earlier.
-   $ sudo unzip FILE_NAME.zip -d /greengrass
+   $ unzip FILE_NAME.zip -d /greengrass
    
    # update the CA certificate used by RoboMaker
    $ cd /greengrass/certs/
-   $ sudo wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
+   $ wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
 
    #start the Greengrass service
-   $ sudo /greengrass/ggc/core/greengrassd start
+   $ /greengrass/ggc/core/greengrassd start
    ```
 
 22. Create a Fleet and add your robot to the Fleet.  Fleets enable you to manage a group of robots.  For example, you can deploy the same robot application to all robots in a fleet.  Then ensures that all your robots are running the same software.  If you need different robots to run differnt software, you can create multiple fleets.  In this workshop, you'll create a single fleet, that contains a single robot.  In the AWS RoboMaker console, choose *Fleets* under *Fleet managment*.  Click the **Create fleet** button. 
