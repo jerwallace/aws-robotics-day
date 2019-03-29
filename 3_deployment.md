@@ -173,7 +173,7 @@ This activity covers the steps required to prepare a physical robot to receive a
    
 Within a few seconds, your robot will begin to download the robot bundle.  Because this is the first time this application is being deployed to your robot, the bundle size is large (~600MB).  It will take about 15 minutes for the robot to download and extract the contents on the robot.  You can follow the deployment progress in the *Robots status* section:
 
-![3_robots_status](img/robots_status.png)
+![3_robots_status](img/robots-status.png)
 
 When the bundle has been successfully deployed, the robot application will automatically be launched on your robot!
 
