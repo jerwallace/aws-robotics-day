@@ -45,9 +45,11 @@ Please follow these steps to setup your account:
 
    Note the Stream name (`roboMaker_TurtleBot3`) for later use.
 
+   ![kinesis-streams](img/kinesis-streams.png)
+
 6. Ensure the default VPC is available for use and has Internet access (either public IP address or NAT gateway). **Make sure you are looking at Default VPC in us-west-2!**
 
-7. Finally, you need to get a few values about your VPC from the RoboMaker console.  In the following steps, you'll begin the process of creating a RoboMaker simulation job for the sole purpose of obtaining the subnet ID's and security group ID that you'll need later.  You won't actually start a simulation yet.  We'll do that later.  To get the information about your VPC network, do the following:
+7. Finally, we will reference **subnet IDs** and **security group IDs** later on in the workshop. We can capture these from the automatic dropdowns when creating a new simulation. In the next few steps, we will start to create a simulation for the sole purpose of capturing these IDs. **Therefore, do not actually create the simulation, you won't start one yet.**  We'll do that later.  To get the information about your VPC network, do the following:
 
    1. *RoboMaker->Simulation jobs->Create simulation job*
 
@@ -59,13 +61,14 @@ Please follow these steps to setup your account:
 
    5. Do the same for the *Security Groups* section (only select a single Security Group).
 
-   6. It should look similar to this:
+   6. Copy the subnet IDs and security group IDs referenced here for use later in the workshop:
 
       ![1_select_subnets](img/1_select_subnets.png)
       
-   7.  Click **Cancel**.  **Do not create this simulation job at this time.**
+   
+   8. Click **Cancel**.  **Do not create this simulation job at this time.**
 
-**Congratulations!** You have compelte4d the setup process of the workshop. 
+**Congratulations!** You have compelted the setup process of the workshop. 
 
 ## Activities
 
