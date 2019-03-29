@@ -1,6 +1,6 @@
 # Deploy a ROS application to your robot
 
-In the previous exercise, you used RoboMaker with Cloud9 to build, bundle and simulate two different robot applications. In the final activity of this workshop, we will deploy the simple Hello World application we built in the first activity. 
+In the previous exercises, you used RoboMaker with Cloud9 to build, bundle and simulate two different robot applications. In the final activity of this workshop, we will deploy the simple Hello World application we built in the first activity. 
 
 In RoboMaker, simulations use Gazebo, which runs in AWS on a fleet of servers with x86 CPU architecture.  However, many physical robots use different CPU architectures, such as ARM.  Before a robot application can be deployed and invoked on a physical robot, it may need to be rebuilt and rebundled for the target CPU architecture of the robot.
 
@@ -77,10 +77,10 @@ This activity covers the steps required to prepare a physical robot to receive a
    
    ```bash
    # Replace <YOUR_BUCKET_NAME> with your bucket
-   aws s3 cp ~/environment/aws-robotics-day/HelloRobot/robot_ws/bundle/output.armhf.tar s3://<YOUR_BUCKET_NAME>/HelloRobot/output-robot.armhf.tar
+   aws s3 cp s3://bundles.robomakerworkshops.com/turtlebot3-burger/hello-world/robot-armhf.tar s3://<YOUR_BUCKET_NAME>/HelloRobot/output-robot.armhf.tar
    ```
 
-6. Now that you've uploaded an ARMHF version of the application to S3, you need to tell RoboMaker where to find it.  Open the RoboMaker console, and review the Robot applications Development->Robot applications).  Click on the name of the robot application, RoboMakerHelloWorldRobot, to review its details.
+6. Now that you've uploaded an ARMHF version of the application to S3, you need to tell RoboMaker where to find it.  Open the RoboMaker console, and review the Robot Applications (Development->Robot Applications).  Click on the name of the robot application, RoboMakerHelloWorldRobot, to review its details.
 
 7. To view the location of the bundle files for the application, click on the $LATEST link, under Latest version.
 
@@ -173,7 +173,7 @@ This activity covers the steps required to prepare a physical robot to receive a
    
 Within a few seconds, your robot will begin to download the robot bundle.  Because this is the first time this application is being deployed to your robot, the bundle size is large (~600MB).  It will take about 15 minutes for the robot to download and extract the contents on the robot.  You can follow the deployment progress in the *Robots status* section:
 
-![3_robots_status](img/robots_status.jpg)
+![3_robots_status](img/robots_status.png)
 
 When the bundle has been successfully deployed, the robot application will automatically be launched on your robot!
 
