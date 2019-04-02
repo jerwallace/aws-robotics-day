@@ -141,10 +141,6 @@ This activity covers the steps required to prepare a physical robot to receive a
    # unzip the certificates into the /greengrass directory.  Replace FILE_NAME with file you copied earlier.
    $ unzip FILE_NAME.zip -d /greengrass
    
-   # update the CA certificate used by RoboMaker
-   $ cd /greengrass/certs/
-   $ wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
-
    #start the Greengrass service
    $ /greengrass/ggc/core/greengrassd start
    ```
